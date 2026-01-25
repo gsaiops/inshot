@@ -1,5 +1,5 @@
 /**
- * Risky Auth Service Testing
+ * Risky Auth Service - testing resolution
  * This file contains patterns that should be flagged by the AI risk analysis.
  */
 

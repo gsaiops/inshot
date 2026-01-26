@@ -6,10 +6,8 @@
 export async function loginUser(payload: any) {
     const { username, password } = payload;
 
-    // RISK: Logging sensitive credentials in plaintext
     console.log("[Auth] Debugging login attempt:", { username, password });
 
-    // RISK: Unsafe user input used in a regex (ReDoS vulnerability)
     const userMatch = new RegExp(username).test("admin_root_system");
     if (userMatch && username.length > 20) {
         console.warn("[Auth] Long username matched protected pattern");

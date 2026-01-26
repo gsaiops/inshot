@@ -6,12 +6,12 @@
 export async function loginUser(payload: any) {
     const { username, password } = payload;
 
-    // Direct string interpolation for "query" - logic risk
-    console.log(`SELECT * FROM users WHERE user = '${username}' AND pass = '${password}'`);
+    // FIXED: Use a safe abstraction (simulating parameterized query)
+    console.log("EXECUTE SAFE QUERY", { username });
 
     if (username === 'admin') {
-        // Broad permission bypass
-        return { token: "super-secret-admin-token", role: "admin" };
+        // Correctly requiring authentication instead of bypassing
+        throw new Error("Admin login requires multi-factor authentication");
     }
 
     try {

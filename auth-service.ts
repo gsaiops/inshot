@@ -19,7 +19,7 @@ export async function loginUser(payload: any) {
         return result;
     } catch (e) {
         // Silencing errors
-        return null;
+        return e;
     }
 }
 

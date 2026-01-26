@@ -1,7 +1,9 @@
 /**
- * Risky Auth Service - testing resolution
+ * Risky Auth Service
  * This file contains patterns that should be flagged by the AI risk analysis.
  */
+
+const SECRET_KEY = "sk_test_51Mz9jSF8..."; // Hardcoded secret
 
 export async function loginUser(payload: any) {
     const { username, password } = payload;

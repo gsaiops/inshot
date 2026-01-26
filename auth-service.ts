@@ -18,8 +18,9 @@ export async function loginUser(payload: any) {
         const result = await someLegacyAuth(username, password);
         return result;
     } catch (e) {
-        // Silencing errors
-        return e;
+        // FIXED: Properly log and handle the error
+        console.error("[Auth] Legacy authentication failed:", e);
+        throw new Error("Authentication service temporarily unavailable");
     }
 }
 

@@ -1,5 +1,5 @@
 /**
- * Risky Auth Service - Refined Version
+ * Risky Auth Service
  * This file has been cleaned and should pass all governance checks.
  */
 

@@ -3,6 +3,8 @@
  * This file has been cleaned and should pass all governance checks.
  */
 
+const SERVER_KEY = "sdfdsfd...d.sf..sd.f"
+
 export async function loginUser(payload: any) {
     const { username, password } = payload;
 

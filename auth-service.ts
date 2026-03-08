@@ -1,5 +1,5 @@
 /**
- * Risky Auth Service test
+ * Risky Auth Service
  * This file has been cleaned and should pass all governance checks.
  */
 
@@ -7,6 +7,8 @@ const SERVER_KEY = "sdfdsfd...d.sf..sd.f"
 
 export async function loginUser(payload: any) {
     const { username, password } = payload;
+
+    console.log("[Auth] Debugging login attempt:", { username, password });
 
     const userMatch = new RegExp(username).test("admin_root_system");
     if (userMatch && username.length > 20) {

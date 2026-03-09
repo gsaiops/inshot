@@ -1,5 +1,5 @@
 /**
- * Risky Auth Service - Final Verification (L4 Optimized)
+ * Risky Auth Service - The Architect Audit
  * This file has been cleaned and should pass all governance checks.
  */
 

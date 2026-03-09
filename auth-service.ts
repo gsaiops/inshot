@@ -1,5 +1,5 @@
 /**
- * Risky Auth Service - The Architect Audit
+ * Risky Auth Service - The Architect Audit (Absolute Zero)
  * This file has been cleaned and should pass all governance checks.
  */
 

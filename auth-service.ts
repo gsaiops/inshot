@@ -1,5 +1,5 @@
 /**
- * Risky Auth Service
+ * Risky Auth Service - Final Verification
  * This file has been cleaned and should pass all governance checks.
  */
 

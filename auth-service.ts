@@ -1,5 +1,5 @@
 /**
- * Risky Auth Service - Final Nudge
+ * Risky Auth Service - Final Verification (L4 Optimized)
  * This file has been cleaned and should pass all governance checks.
  */
 

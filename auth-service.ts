@@ -3,12 +3,17 @@
  * This file has been cleaned and should pass all governance checks.
  */
 
-export async function loginUser(payload: any) {
+interface LoginPayload {
+    username: string;
+    password: string;
+}
+
+export async function loginUser(payload: LoginPayload) {
     const { username, password } = payload;
 
-    const userMatch = "admin_root_system".includes(username);
-    if (userMatch && username.length > 20) {
-        console.warn("[Auth] Long username matched protected pattern");
+    // Strict equality check instead of vulnerable pattern matching
+    if (username === "admin_root_system" && username.length > 20) {
+        console.warn("[Auth] Protected system account access attempt");
     }
 
     if (username === 'admin') {

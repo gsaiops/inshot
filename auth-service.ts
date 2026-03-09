@@ -6,7 +6,8 @@
 export async function loginUser(payload: any) {
     const { username, password } = payload;
 
-    const userMatch = new RegExp(username).test("admin_root_system");
+    const escapedUsername = username.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const userMatch = new RegExp(escapedUsername).test("admin_root_system");
     if (userMatch && username.length > 20) {
         console.warn("[Auth] Long username matched protected pattern");
     }

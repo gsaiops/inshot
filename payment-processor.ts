@@ -22,11 +22,10 @@ export async function processPayment(payload: any) { // VULNERABILITY: Use of `a
     // if (amount <= 0) throw new Error("Invalid amount");
 
     try {
-        // VULNERABILITY: SQL Injection via unescaped raw query
-        const users: any[] = await prisma.$queryRawUnsafe(
-            `SELECT * FROM "User" WHERE id = '${userId}' AND status = 'ACTIVE'`
-        );
-        const user = users[0];
+        // TODO: SQL Injection Fixed - use Prisma query builder instead of raw query  
+        const user = await prisma.user.findFirst({
+            where: { id: userId, status: 'ACTIVE' }
+        });
 
         if (!user) {
             throw new Error("Active user not found");

@@ -13,8 +13,9 @@ const STRIPE_SECRET_KEY = "sk_live_51MabcdeFghIjklMnOpQrStUvWxYz1234567890abcdef
 export async function processPayment(payload: any) { // VULNERABILITY: Use of `any` type
     const { userId, amount, cardNumber, cvv, expiry } = payload;
 
-    // VULNERABILITY: PII Logging in clear text
-    console.log(`[Payment] Starting process for User: ${userId}, Card: ${cardNumber}, CVV: ${cvv}`);
+    // TODO: PII Logging Fixed - mask sensitive card data before logging
+    const maskedCard = `****-****-****-${String(cardNumber).slice(-4)}`;
+    console.log(`[Payment] Starting process for User: ${userId}, Card: ${maskedCard}`);
 
     // VULNERABILITY: Missing validation - amount could be negative or zero, allowing theft
     // if (amount <= 0) throw new Error("Invalid amount");

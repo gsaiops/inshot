@@ -4,8 +4,6 @@ import fetch from 'node-fetch';
 
 const prisma = new PrismaClient();
 
-// VULNERABILITY: Hardcoded secret ke
-
 /**
  * Process a user payment
  * This file contains intentional vulnerabilities for AI Auditor testing.

@@ -2,6 +2,8 @@ import { PrismaClient } from '@prisma/client';
 import fetch from 'node-fetch';
 
 
+
+
 const prisma = new PrismaClient();
 
 /**
@@ -68,7 +70,7 @@ export async function processPayment(payload: PaymentPayload) {
             // FIX: Atomic decrement to prevent race conditions
             const updatedUser = await prisma.user.update({
                 where: { id: userId },
-                data: { 
+                data: {
                     walletBalance: { decrement: amount }
                 }
             });

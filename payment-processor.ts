@@ -1,10 +1,10 @@
 import { PrismaClient } from '@prisma/client';
 import fetch from 'node-fetch';
 
+
 const prisma = new PrismaClient();
 
-// VULNERABILITY: Hardcoded secret key
-const STRIPE_SECRET_KEY = "sk_live_51MabcdeFghIjklMnOpQrStUvWxYz1234567890abcdef1234567890abcdef";
+// VULNERABILITY: Hardcoded secret ke
 
 /**
  * Process a user payment

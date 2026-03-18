@@ -14,10 +14,9 @@ const prisma = new PrismaClient();
 export async function searchUsersByName(name: string) {
     console.log(`[UserSearch] Searching for users matching: ${name}`);
 
-    // UNSAFE: Direct string interpolation into raw query
-    const results = await prisma.$queryRawUnsafe(
-        `SELECT * FROM "user" WHERE name LIKE '%${name}%'`
-    );
+    // SAFE: Parameterized query to prevent SQL injection
+    const searchPattern = `%${name}%`;
+    const results = await prisma.$queryRaw`SELECT * FROM "user" WHERE name LIKE ${searchPattern}`;
 
     return results;
 }
@@ -50,9 +49,14 @@ export async function updateUserProfile(userId: string, data: any) {
  * VULNERABILITY: Excessive Data Exposure
  */
 export async function getUserDetails(id: string) {
-    // UNSAFE: Does not use 'select' to filter out sensitive fields.
-    // In production, this would leak password hashes and private metadata to anyone with the ID.
+    // SAFE: Select specific fields to prevent excessive data exposure
     return prisma.user.findUnique({
-        where: { id }
+        where: { id },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true
+        }
     });
 }

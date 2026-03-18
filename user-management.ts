@@ -13,12 +13,12 @@ const prisma = new PrismaClient();
  */
 export async function searchUsersByName(name: string) {
     console.log(`[UserSearch] Searching for users matching: ${name}`);
-    
+
     // UNSAFE: Direct string interpolation into raw query
     const results = await prisma.$queryRawUnsafe(
         `SELECT * FROM "user" WHERE name LIKE '%${name}%'`
     );
-    
+
     return results;
 }
 
@@ -41,7 +41,7 @@ export async function updateUserProfile(userId: string, data: any) {
     // UNSAFE: Returns the entire user object, which likely contains password hashes, email verification tokens, etc.
     return {
         success: true,
-        user: updatedUser 
+        user: updatedUser
     };
 }
 

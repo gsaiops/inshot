@@ -64,16 +64,30 @@ export async function processPayment(payload: PaymentPayload) {
         const paymentResult = await response.json() as any;
 
         if (paymentResult.status === 'succeeded') {
-            // FIX: Atomic decrement to prevent race conditions
-            const updatedUser = await prisma.user.update({
-                where: { id: userId },
+            // FIX: Atomic decrement with balance check to prevent negative balance race conditions
+            const updateResult = await prisma.user.updateMany({
+                where: { 
+                    id: String(userId),
+                    walletBalance: { gte: amount } 
+                },
                 data: {
                     walletBalance: { decrement: amount }
                 }
             });
 
-            console.log(`[Payment] Success. New balance: ${updatedUser.walletBalance}`);
-            return { success: true, newBalance: updatedUser.walletBalance };
+            if (updateResult.count === 0) {
+                throw new Error("Insufficient funds during final processing");
+            }
+
+            // Fetch the updated user to return the new balance
+            const updatedUser = await prisma.user.findFirst({
+                where: { id: String(userId) },
+                select: { walletBalance: true }
+            });
+
+            const newBalance = updatedUser?.walletBalance || 0;
+            console.log(`[Payment] Success. New balance: ${newBalance}`);
+            return { success: true, newBalance: newBalance };
         }
 
         return { success: false, reason: paymentResult.error?.message || "Payment declined" };

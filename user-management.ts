@@ -14,8 +14,8 @@ const prisma = new PrismaClient();
 export async function searchUsersByName(name: string) {
     console.log(`[UserSearch] Searching for users matching: ${name}`);
 
-    // UNSAFE: String interpolation allows SQL injection
-    const results = await prisma.$queryRawUnsafe(`SELECT * FROM "user" WHERE name LIKE '%${name}%'`);
+    // SECURE: Uses parameterized query to prevent SQL injection
+    const results = await prisma.$queryRaw`SELECT * FROM "user" WHERE name LIKE ${'%' + name + '%'}`;
 
     return results;
 }

@@ -8,19 +8,23 @@ const prisma = new PrismaClient();
 
 /**
  * Updates user profile information.
+ * FIXED: Uses an explicit field whitelist to prevent Mass Assignment.
  * @param userId - The ID of the user to update.
- * @param data - The profile data from the frontend (e.g., bio, avatarUrl, name).
+ * @param data - The profile data from the frontend.
  */
 export async function updateUserProfile(userId: string, data: any) {
     console.log("[UserUpdate] Updating profile for user: " + userId);
 
-    // SUBTLE VULNERABILITY: Mass Assignment / Privilege Escalation
-    // The 'data' object is passed directly from the request body into Prisma.
-    // An attacker can include { "role": "admin" } in their request to elevate.
-    // Standard static analysis might miss this because it's a generic 'data' object.
+    // SECURE: Only allow updates to specific, safe fields.
+    const { bio, avatarUrl, name } = data;
+    const updateData: any = {};
+    if (bio !== undefined) updateData.bio = bio;
+    if (avatarUrl !== undefined) updateData.avatarUrl = avatarUrl;
+    if (name !== undefined) updateData.name = name;
+
     const updatedUser = await prisma.user.update({
         where: { id: userId },
-        data: data 
+        data: updateData
     });
 
     return {
@@ -35,20 +39,18 @@ export async function updateUserProfile(userId: string, data: any) {
 
 /**
  * Deducts credits for an operation.
+ * FIXED: Uses Prisma's atomic decrement to prevent race conditions (TOCTOU).
  * @param userId - User ID
  * @param amount - Amount to deduct
  */
 export async function deductCredits(userId: string, amount: number) {
-    const user = await prisma.user.findUnique({ where: { id: userId } });
-    
-    if (!user || user.credits < amount) {
-        throw new Error("Insufficient credits");
-    }
-
-    // SUBTLE VULNERABILITY: Race Condition (TOCTOU)
-    // Between the check above and the update below, another process could deduct credits.
     return prisma.user.update({
-        where: { id: userId },
-        data: { credits: user.credits - amount }
+        where: {
+            id: userId,
+            credits: { gte: amount } // Check balance atomically
+        },
+        data: {
+            credits: { decrement: amount } // Update atomically
+        }
     });
 }
